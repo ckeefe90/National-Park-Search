@@ -3,6 +3,10 @@
 const apiKey = "";
 
 function searchParks() {
+    if (!apiKey) {
+        alert("API key is required")
+        return
+    }
     const stateCode = $('#state-code').val();
     const maxLimit = $('#max-limit').val();
     fetch(`https://developer.nps.gov/api/v1/parks?stateCode=${stateCode}&limit=${maxLimit}&api_key=${apiKey}`)
