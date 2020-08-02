@@ -1,15 +1,27 @@
 'use strict';
 
 const apiKey = "";
+const searchUrl = "https://developer.nps.gov/api/v1/parks";
+
+function formatQueryParams(params) {
+    const queryItems = Object.keys(params)
+        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+    return queryItems.join('&');
+}
 
 function searchParks() {
     if (!apiKey) {
-        alert("API key is required")
-        return
+        alert("API key is required");
+        return;
     }
     const stateCode = $('#state-code').val();
     const maxLimit = $('#max-limit').val();
-    fetch(`https://developer.nps.gov/api/v1/parks?stateCode=${stateCode}&limit=${maxLimit}&api_key=${apiKey}`)
+    const params = {
+        stateCode,
+        limit: maxLimit,
+        api_key: apiKey,
+    }
+    fetch(`${searchUrl}?${formatQueryParams(params)}`)
         .then(response => {
             if (response.ok)
                 return response.json();
@@ -48,6 +60,7 @@ function displayResults(responseJson) {
             </li>`
         )
     }
+    $('.results').removeClass('hidden');
 }
 
 function watchForm() {
